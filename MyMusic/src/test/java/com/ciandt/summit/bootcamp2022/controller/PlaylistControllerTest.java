@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,4 +61,20 @@ public class PlaylistControllerTest {
                 result.getResponse().getContentAsString());
     }
 
+    @Test
+    void test_removerMusica() throws Exception {
+
+        String playlist = "92d8123f-e9f6-4806-8e0e-1c6a5d46f2ed";
+        String musica = "c96b8f6f-4049-4e6b-8687-82e29c05b735";
+
+        playlistServiceImp.removerMusicaFromPlaylist(playlist, musica);
+
+        RequestBuilder request = delete("/api/playlists/92d8123f-e9f6-4806-8e0e-1c6a5d46f2ed/musicas/c96b8f6f-4049-4e6b-8687-82e29c05b73");
+
+        MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+
+        assertEquals("",
+                result.getResponse().getContentAsString());
+
+    }
 }
