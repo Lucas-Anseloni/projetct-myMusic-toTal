@@ -31,7 +31,7 @@ public class PlaylistController {
 
     @DeleteMapping("/{playlistId}/musicas/{musicaId}")
     public ResponseEntity<Playlist> removerMusicaPlaylist(@PathVariable String playlistId, @PathVariable String musicaId){
-        logger.info("Executando DELETE - /playlists/" + playlistId + "/musicas");
+        logger.info("Executando DELETE - /playlists/" + playlistId + "/musicas" + musicaId);
         playlistServiceImp.removerMusicaFromPlaylist(playlistId,musicaId);
 
         logger.info("Música removida - 200 OK");
