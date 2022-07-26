@@ -1,36 +1,33 @@
 package com.ciandt.summit.bootcamp2022.controller;
 
 import com.ciandt.summit.bootcamp2022.controller.request.PlaylistRequest;
-import com.ciandt.summit.bootcamp2022.entity.Artista;
-import com.ciandt.summit.bootcamp2022.entity.Musica;
-import com.ciandt.summit.bootcamp2022.entity.Playlist;
+import com.ciandt.summit.bootcamp2022.entity.*;
+import com.ciandt.summit.bootcamp2022.model.ArtistaDTO;
+import com.ciandt.summit.bootcamp2022.model.MusicaDTO;
 import com.ciandt.summit.bootcamp2022.service.PlaylistServiceImp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
+@WebMvcTest(PlaylistController.class)
 public class PlaylistControllerTest {
 
-    @Mock
+    @MockBean
     PlaylistServiceImp playlistServiceImp;
 
     @Autowired
@@ -39,29 +36,19 @@ public class PlaylistControllerTest {
     @Test
     void test_adicionarMusica() throws Exception {
 
-        Musica musica = new Musica();
-        musica.setId("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea");
-        musica.setNome("B.B. On Mars");
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+        PlaylistRequest pR1 = new PlaylistRequest(mR1);
+        Playlist p1 = new Playlist("cb746719-b60e-4c38-9976-f2cbc68581cb");
 
-        Artista artista = new Artista();
-        artista.setId("30ab1678-c616-4314-adcc-918aff5a7a13");
-        artista.setNome("Alice Cooper");
-        musica.setArtista(artista);
-
-        Playlist playlist = new Playlist();
-        playlist.setId("cb746719-b60e-4c38-9976-f2cbc68581cb");
-
-        playlist.setMusicas(new ArrayList<>(List.of(musica)));
-
-        PlaylistRequest pr = new PlaylistRequest(musica);
+        PlaylistMusica playlistMusica = new PlaylistMusica(new PlaylistMusicaKey(p1.getId(), pR1.getData().getId()));
 
         given(playlistServiceImp.adicionarMusicaNaPlaylist(
-                "cb746719-b60e-4c38-9976-f2cbc68581cb", pr)).willReturn(playlist);
+                "cb746719-b60e-4c38-9976-f2cbc68581cb", pR1)).willReturn(playlistMusica);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson = ow.writeValueAsString(pr);
+        String requestJson = ow.writeValueAsString(pR1);
 
         RequestBuilder request = post("/api/playlists/cb746719-b60e-4c38-9976-f2cbc68581cb/musicas")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +58,6 @@ public class PlaylistControllerTest {
 
         assertEquals("",
                 result.getResponse().getContentAsString());
-
     }
 
 }
