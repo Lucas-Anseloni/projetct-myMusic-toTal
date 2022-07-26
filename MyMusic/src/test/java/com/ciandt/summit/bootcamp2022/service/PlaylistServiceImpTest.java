@@ -37,8 +37,8 @@ class PlaylistServiceImpTest {
 
 
     @Test
-    void test_buscaPlaylistIdCorreto(){
-        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+    void test_buscaPlaylistIdCorreto() {
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
         PlaylistRequest pR1 = new PlaylistRequest(mR1);
         Playlist p1 = new Playlist("93f7da42-d9e5-4e50-a789-b4f406897dd7");
 
@@ -48,18 +48,18 @@ class PlaylistServiceImpTest {
     }
 
     @Test
-    void test_buscaPlaylistIdIncorreto(){
-        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+    void test_buscaPlaylistIdIncorreto() {
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
         PlaylistRequest pR1 = new PlaylistRequest(mR1);
         Playlist p1 = new Playlist("93f7da42-d9e-4e50-a789-b4f406897dd7");
 
-       assertThrows(PlaylistNaoExisteException.class, () -> playlistServiceImp.buscarPlaylistPorId(p1.getId()));
+        assertThrows(PlaylistNaoExisteException.class, () -> playlistServiceImp.buscarPlaylistPorId(p1.getId()));
     }
 
     @Test
-    void test_adicionarMusicaPlaylistCorreto(){
-        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
-        Musica m1 = new Musica("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new Artista("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+    void test_adicionarMusicaPlaylistCorreto() {
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
+        Musica m1 = new Musica("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new Artista("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
         PlaylistRequest pR1 = new PlaylistRequest(mR1);
         Playlist p1 = new Playlist("93f7da42-d9e5-4e50-a789-b4f406897dd7");
 
@@ -73,8 +73,8 @@ class PlaylistServiceImpTest {
     }
 
     @Test
-    void test_adicionarMusicaPlaylistIdIncorreto(){
-        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+    void test_adicionarMusicaPlaylistIdIncorreto() {
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
         PlaylistRequest pR1 = new PlaylistRequest(mR1);
         Playlist p1 = new Playlist("93f7da42-d9e5-4e50-a7-b4f406897dd7");
 
@@ -84,8 +84,8 @@ class PlaylistServiceImpTest {
     }
 
     @Test
-    void test_adicionarMusicaPlaylistMusicaIdIncorreto(){
-        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+    void test_adicionarMusicaPlaylistMusicaIdIncorreto() {
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269", "Marseilles", new ArtistaDTO("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
         PlaylistRequest pR1 = new PlaylistRequest(mR1);
         Playlist p1 = new Playlist("93f7da42-d9e5-4e50-a789-b4f406897dd7");
 
@@ -96,11 +96,31 @@ class PlaylistServiceImpTest {
     }
 
     @Test
-    void test_PayloadBodyIncorreto(){
-        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "", new ArtistaDTO("",""));
-        Musica m1 = new Musica("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new Artista("771bc41f-20dd-418b-9df1-5b01e8cf0658","Brian Eno"));
+    void test_PayloadBodyIncorreto() {
+        MusicaDTO mR1 = new MusicaDTO("b97e179d-76f1-44bb-a04f-1d678c1269ff", "", new ArtistaDTO("", ""));
+        Musica m1 = new Musica("b97e179d-76f1-44bb-a04f-1d678c1269ff", "Marseilles", new Artista("771bc41f-20dd-418b-9df1-5b01e8cf0658", "Brian Eno"));
 
-        assertThrows(PayloadBodyInvalidoException.class, () -> playlistServiceImp.validarPayloadBodyRequest(mR1,m1));
+        assertThrows(PayloadBodyInvalidoException.class, () -> playlistServiceImp.validarPayloadBodyRequest(mR1, m1));
+    }
+
+    @Test
+    void test_removerMusicaPlaylist() {
+
+        Musica music = new Musica("c96b8f6f-4049-4e6b-8687-82e29c05b735", "Big Iron Horse",
+                new Artista("c1fa3a42-c810-4f9e-9b1b-85f5db924ac1", "Carl Perkins"));
+
+        String playlist = "92d8123f-e9f6-4806-8e0e-1c6a5d46f2ed";
+
+        String musica = "c96b8f6f-4049-4e6b-8687-82e29c05b735";
+
+        given(playlistMusicaRepository.findByPlaylistIdAndMusicaId(playlist, musica)).willReturn(Optional.of(new PlaylistMusica()));
+        given(playlistRepository.findById(playlist)).willReturn(Optional.of(new Playlist(playlist)));
+        given(musicaServiceImp.buscarMusicaPorId(musica)).willReturn(music);
+        PlaylistMusica playlistMusica = new PlaylistMusica(new PlaylistMusicaKey(playlist, musica));
+
+        playlistServiceImp.removerMusicaFromPlaylist(playlist, musica);
+
+        assertNotEquals(playlistMusica, playlistMusicaRepository.findByPlaylistIdAndMusicaId(playlist, musica));
     }
 
 }
