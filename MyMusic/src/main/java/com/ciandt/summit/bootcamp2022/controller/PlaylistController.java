@@ -3,6 +3,7 @@ package com.ciandt.summit.bootcamp2022.controller;
 import com.ciandt.summit.bootcamp2022.controller.request.PlaylistRequest;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.service.PlaylistServiceImp;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class PlaylistController {
     private PlaylistServiceImp playlistServiceImp;
 
     @PostMapping("/{playlistId}/musicas")
+    @Operation(summary = "Responsável por adicionar uma música no playlist.")
     public ResponseEntity<Playlist> adicionarMusicaPlaylist(@PathVariable String playlistId, @RequestBody PlaylistRequest musica){
         logger.info("Executando POST - /playlists/" + playlistId + "/musicas");
         playlistServiceImp.adicionarMusicaNaPlaylist(playlistId, musica);
@@ -30,6 +32,7 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/{playlistId}/musicas/{musicaId}")
+    @Operation(summary = "Responsável por remover uma música no playlist.")
     public ResponseEntity<Playlist> removerMusicaPlaylist(@PathVariable String playlistId, @PathVariable String musicaId){
         logger.info("Executando DELETE - /playlists/" + playlistId + "/musicas" + musicaId);
         playlistServiceImp.removerMusicaFromPlaylist(playlistId,musicaId);
