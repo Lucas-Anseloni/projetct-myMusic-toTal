@@ -3,6 +3,7 @@ package com.ciandt.summit.bootcamp2022.controller;
 import com.ciandt.summit.bootcamp2022.entity.Musica;
 import com.ciandt.summit.bootcamp2022.exception.MusicaNaoEncontradaException;
 import com.ciandt.summit.bootcamp2022.service.MusicaServiceImp;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class MusicController {
     @Autowired   private MusicaServiceImp musicaServiceImp;
 
     @GetMapping("/musicas")
+    @Operation(summary = "- Reponsável por buscar as musícas.")
     public ResponseEntity<List<Musica>> buscarMusica(@RequestParam String filtro){
         logger.info("Executando GET - /api/musicas?filtro=" + filtro);
         List<Musica> musicas =  musicaServiceImp.buscarMusicas(filtro);

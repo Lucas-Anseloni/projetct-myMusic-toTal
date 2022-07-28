@@ -13,7 +13,10 @@ public class ConfigInterceptor extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(inperceptor);
+        registry.addInterceptor(inperceptor)
+                .excludePathPatterns("/v3/api-docs/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**");
     }
 
 }
