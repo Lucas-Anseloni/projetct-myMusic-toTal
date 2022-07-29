@@ -80,7 +80,7 @@ class MusicaServiceImpTest {
             fail("Esta faltando a excecao");
         }catch(FiltroInvalidoException ex){
             assertEquals(FiltroInvalidoException.class, ex.getClass());
-            assertEquals("Filtro invalido.", ex.getMessage());
+            assertEquals("1", ex.getMessage());
         }
     }
 
