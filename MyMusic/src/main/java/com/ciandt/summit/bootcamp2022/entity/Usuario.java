@@ -2,13 +2,11 @@ package com.ciandt.summit.bootcamp2022.entity;
 
 
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 @Entity
 @Table(name = "Usuarios")
 public class Usuario {
@@ -20,9 +18,9 @@ public class Usuario {
     @Column(name = "tipoUsuario")
     private TipoUsuarioEnum tipoUsuarioEnum;
 
-    @OneToMany
+    @OneToOne
     @JoinColumn(name = "PlaylistId")
-    private List<Playlist> playlist;
+    private Playlist playlist;
 
     public Usuario() {
     }
@@ -51,11 +49,11 @@ public class Usuario {
         this.tipoUsuarioEnum = tipoUsuarioEnum;
     }
 
-    public List<Playlist> getPlaylist() {
+    public Playlist getPlaylist() {
         return playlist;
     }
 
-    public void setPlaylist(List<Playlist> playlist) {
+    public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
     }
 }
