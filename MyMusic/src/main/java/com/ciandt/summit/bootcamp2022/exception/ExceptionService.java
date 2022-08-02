@@ -83,4 +83,13 @@ public class ExceptionService {
         logger.error(uer.getMessage() + " - " + HttpStatus.NOT_FOUND);
         return new ResponseEntity(uer,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UsuarioNaoExisteException.class)
+    ResponseEntity<UsuarioNaoExisteException> handleException(UsuarioNaoExisteException err){
+        UserErrorResponse uer =new UserErrorResponse();
+        uer.setStatus(HttpStatus.NO_CONTENT.value());
+        uer.setMessage("O não encontrado ("+err.getMessage()+")");
+        logger.error(uer.getMessage() + " - " + HttpStatus.NO_CONTENT);
+        return new ResponseEntity(uer,HttpStatus.NO_CONTENT);
+    }
 }
