@@ -92,4 +92,13 @@ public class ExceptionService {
         logger.error(uer.getMessage() + " - " + HttpStatus.NO_CONTENT);
         return new ResponseEntity(uer,HttpStatus.NO_CONTENT);
     }
+
+    @ExceptionHandler(ValidarQuantidadeMusica.class)
+    ResponseEntity<ValidarQuantidadeMusica> handleException(ValidarQuantidadeMusica err){
+        UserErrorResponse uer =new UserErrorResponse();
+        uer.setStatus(HttpStatus.UNAUTHORIZED.value());
+        uer.setMessage("Você atingiu o número máximo de músicas em sua playlist.Para adicionar mais músicas contrate o plano Premium. ("+err.getMessage()+")");
+        logger.error(uer.getMessage() + " - " + HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(uer,HttpStatus.UNAUTHORIZED);
+    }
 }

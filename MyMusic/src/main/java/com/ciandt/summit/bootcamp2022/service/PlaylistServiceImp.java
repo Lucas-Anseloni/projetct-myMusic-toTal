@@ -1,14 +1,8 @@
 package com.ciandt.summit.bootcamp2022.service;
 
 import com.ciandt.summit.bootcamp2022.controller.request.PlaylistRequest;
-import com.ciandt.summit.bootcamp2022.entity.Musica;
-import com.ciandt.summit.bootcamp2022.entity.Playlist;
-import com.ciandt.summit.bootcamp2022.entity.PlaylistMusica;
-import com.ciandt.summit.bootcamp2022.entity.PlaylistMusicaKey;
-import com.ciandt.summit.bootcamp2022.exception.NaoPermitidoSalvarAMesmaMusicaException;
-import com.ciandt.summit.bootcamp2022.exception.PayloadBodyInvalidoException;
-import com.ciandt.summit.bootcamp2022.exception.PlaylistNaoContemMusicaException;
-import com.ciandt.summit.bootcamp2022.exception.PlaylistNaoExisteException;
+import com.ciandt.summit.bootcamp2022.entity.*;
+import com.ciandt.summit.bootcamp2022.exception.*;
 import com.ciandt.summit.bootcamp2022.model.MusicaDTO;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistMusicaRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
@@ -30,6 +24,9 @@ public class PlaylistServiceImp implements PlaylistService {
     private PlaylistMusicaRepository playlistMusicaRepository;
     @Autowired
     private MusicaServiceImp musicaServiceImp;
+
+    @Autowired
+    private UsuarioServiceImp usuarioServiceImp;
 
     @Override
     public PlaylistMusica adicionarMusicaNaPlaylist(String playlistId, PlaylistRequest musicaRequest) {
@@ -78,5 +75,35 @@ public class PlaylistServiceImp implements PlaylistService {
             throw new PlaylistNaoContemMusicaException(playlistId + " " + musicaId);
         }
         logger.info("Removendo a musica " + musica + " da playlist " + playlist.getId());
+    }
+
+    @Override
+    public PlaylistMusica adicionarMusicaNaPlaylistUsuario(String playlistId, String musicaId, String usuarioId) {
+        buscarPlaylistPorId(playlistId);
+
+        Usuario usuario = usuarioServiceImp.buscarUsuario(usuarioId);
+
+        if(!usuario.getPlaylist().getId().equals(playlistId)){
+            throw new PlaylistNaoExisteException(playlistId);
+        }
+
+        if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.COMUM) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
+            throw new ValidarQuantidadeMusica(usuarioId);
+        }
+
+        musicaServiceImp.buscarMusicaPorId(musicaId);
+
+        Optional<PlaylistMusica> relacaoPlaylistMusica = playlistMusicaRepository.findByPlaylistIdAndMusicaId(playlistId, musicaId);
+
+        if (relacaoPlaylistMusica.isPresent()) {
+            throw new NaoPermitidoSalvarAMesmaMusicaException("Música duplicada.");
+        }
+
+        PlaylistMusica playlistMusica = new PlaylistMusica(new PlaylistMusicaKey(playlistId, musicaId));
+
+        playlistMusicaRepository.save(playlistMusica);
+
+        return playlistMusica;
+
     }
 }
