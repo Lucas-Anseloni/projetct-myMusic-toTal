@@ -11,4 +11,6 @@ public interface PlaylistService {
     Playlist buscarPlaylistPorId(String playlistId);
 
      void removerMusicaFromPlaylist(String playlistId, String musicaId);
+
+    PlaylistMusica adicionarMusicaNaPlaylistUsuario(String playlistId, String musicaId, String usuarioId);
 }

@@ -12,4 +12,6 @@ public interface PlaylistMusicaRepository extends JpaRepository<PlaylistMusica, 
     @Query(value = "select * from PlaylistMusicas pl where pl.PlaylistId = ?1 and pl.MusicaId = ?2", nativeQuery = true)
     Optional<PlaylistMusica> findByPlaylistIdAndMusicaId(String playlistMusicas, String musicaId);
 
+    @Query(value = "SELECT COUNT(pl.MusicaId) as Quantidade FROM PlaylistMusicas pl INNER join Usuarios us on us.PlaylistId = pl.PlaylistId where us.Id = ?1", nativeQuery = true)
+    Long quantidadeMusica(String usuarioId);
 }
