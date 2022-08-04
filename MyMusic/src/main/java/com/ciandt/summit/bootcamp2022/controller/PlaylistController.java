@@ -42,11 +42,11 @@ public class PlaylistController {
         return new ResponseEntity<Playlist>(HttpStatus.OK);
     }
 
-    @PostMapping("/{playlistId}/musicas/{musicaId}/{usuarioId}")
+    @PostMapping("/{playlistId}/musicas/{usuarioId}")
     @Operation(summary = "Responsável por adicionar uma música no playlist do usuário.", security = @SecurityRequirement(name = "basicAuth"))
-    public ResponseEntity<Playlist> adicionarMusicaPlaylistUsuario(@PathVariable String playlistId, @PathVariable String musicaId, @PathVariable String usuarioId){
-        logger.info("Executando POST - /playlists/" + playlistId + "/musicas/usuario");
-        playlistServiceImp.adicionarMusicaNaPlaylistUsuario(playlistId, musicaId, usuarioId);
+    public ResponseEntity<Playlist> adicionarMusicaPlaylistUsuario(@PathVariable String playlistId,  @RequestBody PlaylistRequest musica, @PathVariable String usuarioId){
+        logger.info("Executando POST - /playlists/" + playlistId + "/musicas/" + usuarioId);
+        playlistServiceImp.adicionarMusicaNaPlaylistUsuario(playlistId, musica, usuarioId);
 
         logger.info("Música Adicionada - 201 OK");
         return new ResponseEntity<Playlist>(HttpStatus.CREATED);

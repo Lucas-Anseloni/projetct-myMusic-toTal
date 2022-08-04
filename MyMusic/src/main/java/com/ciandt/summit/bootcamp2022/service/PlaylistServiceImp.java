@@ -78,7 +78,7 @@ public class PlaylistServiceImp implements PlaylistService {
     }
 
     @Override
-    public PlaylistMusica adicionarMusicaNaPlaylistUsuario(String playlistId, String musicaId, String usuarioId) {
+    public PlaylistMusica adicionarMusicaNaPlaylistUsuario(String playlistId, PlaylistRequest musicaRequest, String usuarioId) {
         buscarPlaylistPorId(playlistId);
 
         Usuario usuario = usuarioServiceImp.buscarUsuario(usuarioId);
@@ -91,15 +91,17 @@ public class PlaylistServiceImp implements PlaylistService {
             throw new ValidarQuantidadeMusica(usuarioId);
         }
 
-        musicaServiceImp.buscarMusicaPorId(musicaId);
+        Musica musicaDb = musicaServiceImp.buscarMusicaPorId(musicaRequest.getData().getId());
 
-        Optional<PlaylistMusica> relacaoPlaylistMusica = playlistMusicaRepository.findByPlaylistIdAndMusicaId(playlistId, musicaId);
+        validarPayloadBodyRequest(musicaRequest.getData(), musicaDb);
+
+        Optional<PlaylistMusica> relacaoPlaylistMusica = playlistMusicaRepository.findByPlaylistIdAndMusicaId(playlistId, musicaRequest.getData().getId());
 
         if (relacaoPlaylistMusica.isPresent()) {
             throw new NaoPermitidoSalvarAMesmaMusicaException("Música duplicada.");
         }
 
-        PlaylistMusica playlistMusica = new PlaylistMusica(new PlaylistMusicaKey(playlistId, musicaId));
+        PlaylistMusica playlistMusica = new PlaylistMusica(new PlaylistMusicaKey(playlistId, musicaRequest.getData().getId()));
 
         playlistMusicaRepository.save(playlistMusica);
 
