@@ -5,6 +5,7 @@ import com.ciandt.summit.bootcamp2022.entity.*;
 import com.ciandt.summit.bootcamp2022.exception.MusicaNaoExisteException;
 import com.ciandt.summit.bootcamp2022.exception.PayloadBodyInvalidoException;
 import com.ciandt.summit.bootcamp2022.exception.PlaylistNaoExisteException;
+import com.ciandt.summit.bootcamp2022.exception.ValidarQuantidadeMusica;
 import com.ciandt.summit.bootcamp2022.model.ArtistaDTO;
 import com.ciandt.summit.bootcamp2022.model.MusicaDTO;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistMusicaRepository;
@@ -35,6 +36,8 @@ class PlaylistServiceImpTest {
     @Mock
     private PlaylistMusicaRepository playlistMusicaRepository;
 
+    @Mock
+    private UsuarioServiceImp usuarioServiceImp;
 
     @Test
     void test_buscaPlaylistIdCorreto() {
@@ -121,6 +124,88 @@ class PlaylistServiceImpTest {
         playlistServiceImp.removerMusicaFromPlaylist(playlist, musica);
 
         assertNotEquals(playlistMusica, playlistMusicaRepository.findByPlaylistIdAndMusicaId(playlist, musica));
+    }
+
+    @Test
+    void test_adicionarMusicaPorTipoUsuario() {
+
+        MusicaDTO mR1 = new MusicaDTO("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "B.B. On Mars",
+                new ArtistaDTO("30ab1678-c616-4314-adcc-918aff5a7a13", "Alice Cooper"));
+
+        Musica m1 = new Musica("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "B.B. On Mars",
+                new Artista("30ab1678-c616-4314-adcc-918aff5a7a13", "Alice Cooper"));
+
+        PlaylistRequest pR1 = new PlaylistRequest(mR1);
+        Playlist p1 = new Playlist("cb746719-b60e-4c38-9976-f2cbc68581cb");
+
+        Usuario usuario = new Usuario();
+        usuario.setNome("contarini");
+        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM);
+        usuario.setPlaylist(p1);
+        usuario.setId("5f4d1175-c657-4e80-befb-dfb2ca45f1cf");
+
+        given(playlistRepository.findById(p1.getId())).willReturn(Optional.of(p1));
+        given(musicaServiceImp.buscarMusicaPorId(mR1.getId())).willReturn(m1);
+        given(usuarioServiceImp.buscarUsuario(usuario.getId())).willReturn(usuario);
+        given(playlistMusicaRepository.findByPlaylistIdAndMusicaId(p1.getId(), pR1.getData().getId())).willReturn(Optional.empty());
+
+        PlaylistMusica playlistMusica = new PlaylistMusica(new PlaylistMusicaKey(p1.getId(), pR1.getData().getId()));
+
+        assertEquals(playlistMusica, playlistServiceImp.adicionarMusicaNaPlaylistUsuario(p1.getId(), pR1, usuario.getId()));
+    }
+
+    @Test
+    void test_adicionarMusicaPorTipoUsuario_ErroUsuarioComum(){
+
+        MusicaDTO mR1 = new MusicaDTO("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "B.B. On Mars",
+                new ArtistaDTO("30ab1678-c616-4314-adcc-918aff5a7a13", "Alice Cooper"));
+
+        Musica m1 = new Musica("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "B.B. On Mars",
+                new Artista("30ab1678-c616-4314-adcc-918aff5a7a13", "Alice Cooper"));
+
+        PlaylistRequest pR1 = new PlaylistRequest(mR1);
+        Playlist p1 = new Playlist("cb746719-b60e-4c38-9976-f2cbc68581cb");
+
+        Playlist p2 = new Playlist("cb746719-b60e-4c38-9976-f2cbc68581cbVALORNAOEXISTE"); //Id diferente do p1!
+
+        Usuario usuario = new Usuario();
+        usuario.setNome("contarini");
+        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM);
+        usuario.setPlaylist(p2);
+        usuario.setId("5f4d1175-c657-4e80-befb-dfb2ca45f1cf");
+
+        given(playlistRepository.findById(p1.getId())).willReturn(Optional.of(p1));
+        given(usuarioServiceImp.buscarUsuario(usuario.getId())).willReturn(usuario);
+
+        assertThrows(PlaylistNaoExisteException.class, () -> playlistServiceImp.adicionarMusicaNaPlaylistUsuario(p1.getId(), pR1, usuario.getId()));
+
+    }
+
+    @Test
+    void test_adicionarMusicaPorTipoUsuario_ErroQuantidadeExcedente(){
+
+        MusicaDTO mR1 = new MusicaDTO("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "B.B. On Mars",
+                new ArtistaDTO("30ab1678-c616-4314-adcc-918aff5a7a13", "Alice Cooper"));
+
+        Musica m1 = new Musica("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "B.B. On Mars",
+                new Artista("30ab1678-c616-4314-adcc-918aff5a7a13", "Alice Cooper"));
+
+        PlaylistRequest pR1 = new PlaylistRequest(mR1);
+        Playlist p1 = new Playlist("590aee60-448c-42d1-ad60-c2e82d20d3c6");
+
+        Usuario usuario = new Usuario();
+        usuario.setNome("paulovich");
+        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM);
+        usuario.setPlaylist(p1);
+        usuario.setId("c921280c-4ded-469e-b472-f28ca8dfb689");
+
+        long valor = 5; //quantidade esperada de musicas dentro da playlist!
+
+        given(usuarioServiceImp.buscarUsuario(usuario.getId())).willReturn(usuario);
+        given(playlistRepository.findById(p1.getId())).willReturn(Optional.of(p1));
+        given(playlistMusicaRepository.quantidadeMusica(usuario.getId())).willReturn(valor);
+
+        assertThrows(ValidarQuantidadeMusica.class, () -> playlistServiceImp.adicionarMusicaNaPlaylistUsuario(p1.getId(), pR1, usuario.getId()));
     }
 
 }

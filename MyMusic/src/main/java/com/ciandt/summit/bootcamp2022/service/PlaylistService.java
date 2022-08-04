@@ -12,5 +12,5 @@ public interface PlaylistService {
 
      void removerMusicaFromPlaylist(String playlistId, String musicaId);
 
-    PlaylistMusica adicionarMusicaNaPlaylistUsuario(String playlistId, String musicaId, String usuarioId);
+    PlaylistMusica adicionarMusicaNaPlaylistUsuario(String playlistId, PlaylistRequest musica, String usuarioId);
 }
