@@ -91,7 +91,7 @@ public class PlaylistServiceImp implements PlaylistService {
             throw new PlaylistNaoExisteException(playlistId);
         }
 
-        if(usuario.getTipoUsuarioEnum().equals(TipoUsuarioEnum.COMUM) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
+        if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.COMUM) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
             throw new ValidarQuantidadeMusica(usuarioId);
         }
 

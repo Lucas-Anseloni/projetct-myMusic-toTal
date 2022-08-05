@@ -48,11 +48,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public TipoUsuarioEnum getTipoUsuarioEnum() {
+    public TipoUsuarioEnum getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuarioEnum(TipoUsuarioEnum tipoUsuarioEnum) {
+    public void setTipoUsuario(TipoUsuarioEnum tipoUsuarioEnum) {
         this.tipoUsuario = tipoUsuarioEnum;
     }
 
