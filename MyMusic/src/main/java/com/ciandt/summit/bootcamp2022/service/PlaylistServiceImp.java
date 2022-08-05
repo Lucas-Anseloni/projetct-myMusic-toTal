@@ -6,6 +6,7 @@ import com.ciandt.summit.bootcamp2022.exception.*;
 import com.ciandt.summit.bootcamp2022.model.MusicaDTO;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistMusicaRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
+import com.ciandt.summit.bootcamp2022.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class PlaylistServiceImp implements PlaylistService {
 
     @Autowired
     private UsuarioServiceImp usuarioServiceImp;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public PlaylistMusica adicionarMusicaNaPlaylist(String playlistId, PlaylistRequest musicaRequest) {
@@ -87,7 +91,7 @@ public class PlaylistServiceImp implements PlaylistService {
             throw new PlaylistNaoExisteException(playlistId);
         }
 
-        if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.COMUM) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
+        if(usuario.getTipoUsuarioEnum().equals(TipoUsuarioEnum.COMUM) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
             throw new ValidarQuantidadeMusica(usuarioId);
         }
 
