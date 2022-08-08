@@ -16,7 +16,7 @@ public class Usuario {
     private String nome;
 
     @Column(name = "tipoUsuario")
-    private TipoUsuarioEnum tipoUsuario;
+    private String tipoUsuario;
 
     @OneToOne
     @JoinColumn(name = "PlaylistId")
@@ -25,10 +25,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String id, String nome, TipoUsuarioEnum tipoUsuarioEnum, Playlist playlist) {
+    public Usuario(String id, String nome, String tipoUsuario, Playlist playlist) {
         this.id = id;
         this.nome = nome;
-        this.tipoUsuario = tipoUsuarioEnum;
+        this.tipoUsuario = tipoUsuario;
         this.playlist = playlist;
     }
 
@@ -48,12 +48,12 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public TipoUsuarioEnum getTipoUsuario() {
+    public String getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(TipoUsuarioEnum tipoUsuarioEnum) {
-        this.tipoUsuario = tipoUsuarioEnum;
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
     public Playlist getPlaylist() {

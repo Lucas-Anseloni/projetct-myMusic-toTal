@@ -88,10 +88,10 @@ public class PlaylistServiceImp implements PlaylistService {
         Usuario usuario = usuarioServiceImp.buscarUsuario(usuarioId);
 
         if(!usuario.getPlaylist().getId().equals(playlistId)){
-            throw new PlaylistNaoExisteException(playlistId);
+            throw new PlaylistNaoPertenceAoUsuarioException(playlistId + " " + usuarioId);
         }
 
-        if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.COMUM) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
+        if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.COMUM.getDescricao()) && playlistMusicaRepository.quantidadeMusica(usuarioId) >=5){
             throw new ValidarQuantidadeMusica(usuarioId);
         }
 

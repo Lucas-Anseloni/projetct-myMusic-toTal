@@ -101,4 +101,13 @@ public class ExceptionService {
         logger.error(uer.getMessage() + " - " + HttpStatus.UNAUTHORIZED);
         return new ResponseEntity(uer,HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(PlaylistNaoPertenceAoUsuarioException.class)
+    ResponseEntity<PlaylistNaoPertenceAoUsuarioException> handleException(PlaylistNaoPertenceAoUsuarioException err){
+        UserErrorResponse uer =new UserErrorResponse();
+        uer.setStatus(HttpStatus.UNAUTHORIZED.value());
+        uer.setMessage("A Playlist ("+err.getMessage().split(" ")[0]+") não pertence ao usuário ("+ err.getMessage().split(" ")[1]+")");
+        logger.error(uer.getMessage() + " - " + HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(uer,HttpStatus.UNAUTHORIZED);
+    }
 }
