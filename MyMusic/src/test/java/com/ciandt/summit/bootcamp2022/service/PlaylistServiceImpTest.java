@@ -2,10 +2,7 @@ package com.ciandt.summit.bootcamp2022.service;
 
 import com.ciandt.summit.bootcamp2022.controller.request.PlaylistRequest;
 import com.ciandt.summit.bootcamp2022.entity.*;
-import com.ciandt.summit.bootcamp2022.exception.MusicaNaoExisteException;
-import com.ciandt.summit.bootcamp2022.exception.PayloadBodyInvalidoException;
-import com.ciandt.summit.bootcamp2022.exception.PlaylistNaoExisteException;
-import com.ciandt.summit.bootcamp2022.exception.ValidarQuantidadeMusica;
+import com.ciandt.summit.bootcamp2022.exception.*;
 import com.ciandt.summit.bootcamp2022.model.ArtistaDTO;
 import com.ciandt.summit.bootcamp2022.model.MusicaDTO;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistMusicaRepository;
@@ -140,7 +137,7 @@ class PlaylistServiceImpTest {
 
         Usuario usuario = new Usuario();
         usuario.setNome("contarini");
-        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM);
+        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM.getDescricao());
         usuario.setPlaylist(p1);
         usuario.setId("5f4d1175-c657-4e80-befb-dfb2ca45f1cf");
 
@@ -170,14 +167,14 @@ class PlaylistServiceImpTest {
 
         Usuario usuario = new Usuario();
         usuario.setNome("contarini");
-        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM);
+        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM.getDescricao());
         usuario.setPlaylist(p2);
         usuario.setId("5f4d1175-c657-4e80-befb-dfb2ca45f1cf");
 
         given(playlistRepository.findById(p1.getId())).willReturn(Optional.of(p1));
         given(usuarioServiceImp.buscarUsuario(usuario.getId())).willReturn(usuario);
 
-        assertThrows(PlaylistNaoExisteException.class, () -> playlistServiceImp.adicionarMusicaNaPlaylistUsuario(p1.getId(), pR1, usuario.getId()));
+        assertThrows(PlaylistNaoPertenceAoUsuarioException.class, () -> playlistServiceImp.adicionarMusicaNaPlaylistUsuario(p1.getId(), pR1, usuario.getId()));
 
     }
 
@@ -195,7 +192,7 @@ class PlaylistServiceImpTest {
 
         Usuario usuario = new Usuario();
         usuario.setNome("paulovich");
-        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM);
+        usuario.setTipoUsuario(TipoUsuarioEnum.COMUM.getDescricao());
         usuario.setPlaylist(p1);
         usuario.setId("c921280c-4ded-469e-b472-f28ca8dfb689");
 
